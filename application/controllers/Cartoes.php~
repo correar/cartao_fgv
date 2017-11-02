@@ -1,0 +1,40 @@
+<?php
+
+
+class Cartoes extends CI_Controller {
+
+    public function __construct()
+    {
+	parent::__construct();
+	$this->load->library('parser');
+	$this->load->library('unidades');
+	$this->load->library('setores');
+	$this->load->helper('url');
+	$this->load->model('unidades_model');
+	$this->load->model('setores_model');
+    }
+
+    public function index()
+    {
+	//Inicializa a tela de cartao, com idioma em Bilingue, Unidade 1, Setor 1, endereco 1
+	$unidade = array('idioma' => 1);
+	$setor = array('idSetor' => '', 'idUnidade' => 1);
+	$data = array(
+	    'unidades' => $this->unidades->get_Unidades($unidade),
+	    'setores' => $this->setores->get_Setores($setor)
+	);
+	$this->load->view('templates/header');
+	$this->parser->parse('cartoes/index', $data);
+	$this->load->view('templates/footer');
+    }
+
+    public function listarSetor()
+    {
+	$setor = array('idSetor' => '', 'idUnidade' => $this->uri->segment(3));
+	$data = array(
+	    'setores' => $this->setores->get_Setores($setor)
+	);
+	$this->parser->parse('cartoes/listaSetor', $data);
+    }
+
+}
